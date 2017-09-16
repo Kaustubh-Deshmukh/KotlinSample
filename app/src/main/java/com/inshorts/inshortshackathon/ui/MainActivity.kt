@@ -1,5 +1,6 @@
 package com.inshorts.inshortshackathon.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DefaultItemAnimator
@@ -9,6 +10,7 @@ import android.util.Log
 import android.view.View
 import com.github.kittinunf.fuel.Fuel
 import com.inshorts.inshortshackathon.R
+import com.inshorts.inshortshackathon.helpers.ClickListener
 import com.inshorts.inshortshackathon.helpers.InshortsScrollListener
 import com.inshorts.inshortshackathon.helpers.adapters.NewsAdapter
 import com.inshorts.inshortshackathon.helpers.constants.Constants
@@ -59,11 +61,13 @@ class MainActivity : AppCompatActivity() {
                 return swipeLayout.isRefreshing
             }
         })
-        adapter?.setOnClickListener(
-                View.OnClickListener { view ->
-
-                }
-        )
+        adapter?.setOnClickListener(object : ClickListener {
+            override fun onClick(pos: Int, news: News) {
+                val intent = Intent(applicationContext, WebViewActivity::class.java)
+                intent.putExtra("news", news)
+                startActivity(intent)
+            }
+        })
         swipeLayout.isRefreshing = false
         swipeLayout.setOnRefreshListener {
             list.clear()

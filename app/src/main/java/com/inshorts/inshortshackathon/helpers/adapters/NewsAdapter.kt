@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.inshorts.inshortshackathon.R
+import com.inshorts.inshortshackathon.helpers.ClickListener
 import com.inshorts.inshortshackathon.models.News
 import kotlinx.android.synthetic.main.recycler_item_news.view.*
 
@@ -17,19 +18,19 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
 
     val TAG: String = "###NewsAdapter"
     var list: MutableList<News> = arrayListOf()
-    var listener: View.OnClickListener? = null
+    var listener: ClickListener? = null
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.itemView?.newsTitle?.text = list[position].TITLE
         holder?.itemView?.newsPublisher?.text = list[position].PUBLISHER
+        holder?.itemView?.setOnClickListener { view: View? ->
+            listener?.onClick(position, list[position])
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent?.context)
                 .inflate(R.layout.recycler_item_news, parent, false)
-        view.setOnClickListener { view: View? ->
-            listener?.onClick(view)
-        }
         return ViewHolder(view)
     }
 
@@ -45,7 +46,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {
         list.clear()
     }
 
-    fun setOnClickListener(l: View.OnClickListener) {
+    fun setOnClickListener(l: ClickListener) {
         listener = l
     }
 
